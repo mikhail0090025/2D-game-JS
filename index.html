@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="js/gameClasses.js"></script>
+    <script src="js/GlobalVariables.js"></script>
+</head>
+<body>
+    <div id="MainMenu">
+        <button id="NewGame">New game</button><br>
+        <button id="LoadGame" disabled>Load game</button>
+    </div>
+    <div id="NewGameBlock">
+        <label for="name">Name:</label>
+        <input type="text" id="name" name="name"><br>
+        <label for="size">Size:</label>
+        <input type="number" id="size" name="size" min="100" max="50000" step="10"><br>
+        <label for="seed">Seed:</label>
+        <input type="text" id="seed" name="seed"><br>
+        <button id="ButtonCreateGame">Create!</button>
+    </div>
+    <div id="Game">
+        <canvas id="mainCanvas"></canvas>
+    </div>
+
+    <!-- INIT -->
+    <script>
+        document.getElementById("NewGameBlock").style.display = "none";
+        document.getElementById("Game").style.display = "none";
+        document.getElementById("NewGame").onclick = function () {
+            document.getElementById("NewGameBlock").style.display = "block";
+            document.getElementById("MainMenu").style.display = "none";
+            document.getElementById("Game").style.display = "none";
+        };
+    </script>
+
+    <script src="js/gameScript.js"></script>
+</body>
+</html>
