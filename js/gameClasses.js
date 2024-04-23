@@ -39,11 +39,26 @@ class Game{
             this.Seed = res;
         }
         this.Blocks = [];
-        for (let index = 0; index < this.Size; index++) {
-            this.Blocks.push(new GrassBlock(new Point(index, 50)));
-            this.Blocks.push(new Land(new Point(index, 49)));
-            this.Blocks.push(new Land(new Point(index, 48)));
-            this.Blocks.push(new Land(new Point(index, 47)));
+        var currHeight = 5;
+        var ChanceChangeHeight = 0.4;
+        for (let x = 0; x < this.Size; x++) {
+            this.Blocks.push(new GrassBlock(new Point(x, currHeight)));
+            for (let y = 0; y < currHeight; y++) {
+                this.Blocks.push(new Land(new Point(x, y)));
+            }
+            if(RandomNumber(0,1,this.Seed + x) < ChanceChangeHeight){
+                if(currHeight <= 3) currHeight++;
+                else if(currHeight >= 10) currHeight--;
+                else{
+                    if(RandomNumber(0,1,this.Seed+x+1) < 0.5) currHeight++;
+                    else currHeight--;
+                }
+            }
         }
+        this.Player = new Player(new Point(2, 10));
     }
+}
+
+function RandomNumber(min, max, seed) {
+    return ((Math.sin(seed * seed) + 1) * 2) * (max - min) + min;
 }

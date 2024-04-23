@@ -14,15 +14,15 @@
     </div>
     <div id="NewGameBlock">
         <label for="name">Name:</label>
-        <input type="text" id="name" name="name"><br>
+        <input type="text" id="name" name="name" value="New world"><br>
         <label for="size">Size:</label>
-        <input type="number" id="size" name="size" min="100" max="50000" step="10"><br>
+        <input type="number" id="size" name="size" min="100" max="50000" step="10" value="500"><br>
         <label for="seed">Seed:</label>
         <input type="text" id="seed" name="seed"><br>
         <button id="ButtonCreateGame">Create!</button>
     </div>
     <div id="Game">
-        <canvas id="mainCanvas"></canvas>
+        <canvas id="mainCanvas" width="900px" height="600px" style="border: 2px solid black;"></canvas>
     </div>
 
     <!-- INIT -->
