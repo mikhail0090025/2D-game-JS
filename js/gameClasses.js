@@ -31,6 +31,11 @@ class Stone extends Block{
         super(pos, "Stone", "Just a piece of stone :)");
     }
 }
+class MetalOre extends Block{
+    constructor(pos){
+        super(pos, "Metal ore", "Metal ore can be used to give a metal");
+    }
+}
 class Game{
     constructor(size, seed, name){
         this.Seed = seed;
@@ -66,6 +71,13 @@ class Game{
                 }
             }
         }
+
+        // ORES GENERATION
+        this.Blocks.forEach((block, index) => {
+            if(block instanceof Stone && RandomNumber(0,1,index*index) < MetalOrePropability){
+                this.Blocks[index] = new MetalOre(this.Blocks[index].Position);
+            }
+        });
         this.Player = new Player(new Point(2, 12));
     }
 

@@ -29,13 +29,20 @@ function Redraw() {
         var offsetY = block.Position.Y - currentGame.Player.Position.Y;
         if(block instanceof GrassBlock){
             mainCanvasCtx.fillStyle = "green";
-            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)+(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
         }else if(block instanceof Land){
             mainCanvasCtx.fillStyle = "brown";
-            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)+(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
         }else if(block instanceof Stone){
             mainCanvasCtx.fillStyle = "#999999";
-            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)+(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
+        }else if(block instanceof MetalOre){
+            mainCanvasCtx.fillStyle = "#787878";
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)+(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
+            mainCanvasCtx.fillStyle = "#EFE";
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)+(offsetX*blockSize)-(blockSize/3), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize / 5, blockSize / 5);
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)+(offsetX*blockSize)+(blockSize/3), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize / 6, blockSize / 7);
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)+(offsetX*blockSize)-(blockSize/4), (mainCanvas.clientHeight/2)-(offsetY*blockSize)+(blockSize/3), blockSize / 4, blockSize / 5);
         }
     });
 
