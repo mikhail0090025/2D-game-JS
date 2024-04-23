@@ -19,21 +19,49 @@ ButtonCreateGame.onclick = function () {
     MainMenu.style.display = "none";
     NewGameBlock.style.display = "none";
     GameBlock.style.display = "block";
-    Redraw();
+    Frame();
 }
 
 function Redraw() {
-    mainCanvasCtx.fillStyle = "red";
-    mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(blockSize/2), (mainCanvas.clientHeight/2)-blockSize, blockSize, blockSize*2);
+    mainCanvasCtx.clearRect(0,0,mainCanvas.clientWidth, mainCanvas.clientHeight);
     currentGame.Blocks.forEach(block => {
         var offsetX = block.Position.X - currentGame.Player.Position.X;
         var offsetY = block.Position.Y - currentGame.Player.Position.Y;
         if(block instanceof GrassBlock){
             mainCanvasCtx.fillStyle = "green";
-            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(blockSize/2)-(offsetX*blockSize), (mainCanvas.clientHeight/2)-blockSize-(offsetY*blockSize), blockSize, blockSize);
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
         }else if(block instanceof Land){
             mainCanvasCtx.fillStyle = "brown";
-            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(blockSize/2)-(offsetX*blockSize), (mainCanvas.clientHeight/2)-blockSize-(offsetY*blockSize), blockSize, blockSize);
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
+        }else if(block instanceof Stone){
+            mainCanvasCtx.fillStyle = "#999999";
+            mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);
         }
     });
+
+    // PLAYER
+    mainCanvasCtx.fillStyle = "red";
+    mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)-(blockSize/2), (mainCanvas.clientHeight/2)-blockSize, blockSize, blockSize*2);
+}
+
+function Frame() {
+    var highAboveGround = currentGame.HighPlayerAboveGround();
+    if(highAboveGround > 1) currentGame.Player.Position.Y -= 0.1;
+    if(highAboveGround < 1) currentGame.Player.Position.Y += 1 - highAboveGround;
+    Redraw();
+    console.log(highAboveGround);
+}
+
+document.onkeydown = function (event) {
+    console.log(event.key);
+    switch (event.key) {
+        case "r":
+            Frame();
+            break;
+        case " ":
+            if(currentGame.PlayerIsOnGround()) currentGame.Player.Position.Y++;
+            break;
+        default:
+            break;
+    }
 }
