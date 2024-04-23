@@ -41,6 +41,7 @@ class Game{
         this.Seed = seed;
         this.Size = size;
         this.Name = name;
+        var currHeight = 10;
         if(!Number.isInteger(this.Seed)){
             var res = 0;
             for (let index = 0; index < this.Seed.length; index++) {
@@ -49,7 +50,6 @@ class Game{
             this.Seed = res;
         }
         this.Blocks = [];
-        var currHeight = 10;
         var ChanceChangeHeight = 0.4;
         for (let x = 0; x < this.Size; x++) {
             var stoneHeight = currHeight * RandomNumber(0.4, 0.7, this.Seed + x);
@@ -70,6 +70,7 @@ class Game{
                     else currHeight--;
                 }
             }
+            if(currHeight > MaxAvailableHeight) throw new Error("Error: Height is over than allowed!");
         }
 
         // ORES GENERATION
@@ -78,6 +79,21 @@ class Game{
                 this.Blocks[index] = new MetalOre(this.Blocks[index].Position);
             }
         });
+
+        // BLOCK MATRIX CREATION
+        this.Matrix = [];
+        for (let index = 0; index < this.Size; index++) {
+            this.Matrix.push([]);
+            for (let index2 = 0; index2 < MaxAvailableHeight; index2++) {
+                this.Matrix[index].push({});
+            }
+        }
+        this.Blocks.forEach(block => {
+            this.Matrix[block.Position.X][block.Position.Y] = block;
+        });
+        console.log(this.Matrix);
+
+        //PLAYER
         this.Player = new Player(new Point(2, 12));
     }
 
