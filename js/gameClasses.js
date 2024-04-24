@@ -33,7 +33,17 @@ class Stone extends Block{
 }
 class MetalOre extends Block{
     constructor(pos){
-        super(pos, "Metal ore", "Metal ore can be used to give a metal");
+        super(pos, "Metal ore", "Metal ore can be used to get a metal");
+    }
+}
+class GoldOre extends Block{
+    constructor(pos){
+        super(pos, "Gold ore", "Gold ore can be used to get a gold");
+    }
+}
+class Bedrock extends Block{
+    constructor(pos){
+        super(pos, "Bedrock", "Unbreakable stone");
     }
 }
 class Game{
@@ -41,7 +51,7 @@ class Game{
         this.Seed = seed;
         this.Size = size;
         this.Name = name;
-        var currHeight = 10;
+        var currHeight = StartWorldHeight;
         if(!Number.isInteger(this.Seed)){
             var res = 0;
             for (let index = 0; index < this.Seed.length; index++) {
@@ -50,7 +60,6 @@ class Game{
             this.Seed = res;
         }
         this.Blocks = [];
-        var ChanceChangeHeight = 0.4;
         for (let x = 0; x < this.Size; x++) {
             var stoneHeight = currHeight * RandomNumber(0.4, 0.7, this.Seed + x);
             console.log("Random number: " + RandomNumber(0.4, 0.7, this.Seed + x));
@@ -58,13 +67,15 @@ class Game{
             for (let y = 0; y < currHeight; y++) {
                 if(y > stoneHeight){
                     this.Blocks.push(new Land(new Point(x, y)));
-                }else if(y <= stoneHeight){
+                }else if(y <= stoneHeight && y !== 0){
                     this.Blocks.push(new Stone(new Point(x, y)));
+                }else if(y === 0){
+                    this.Blocks.push(new Bedrock(new Point(x, y)));
                 }
             }
             if(RandomNumber(0,1,this.Seed + x) < ChanceChangeHeight){
-                if(currHeight <= 3) currHeight++;
-                else if(currHeight >= 10) currHeight--;
+                if(currHeight <= MinGroundHeight) currHeight++;
+                else if(currHeight >= MaxGroundHeight) currHeight--;
                 else{
                     if(RandomNumber(0,1,this.Seed+x+1) < 0.5) currHeight++;
                     else currHeight--;
@@ -77,6 +88,9 @@ class Game{
         this.Blocks.forEach((block, index) => {
             if(block instanceof Stone && RandomNumber(0,1,index*index) < MetalOrePropability){
                 this.Blocks[index] = new MetalOre(this.Blocks[index].Position);
+            }
+            else if(block instanceof Stone && RandomNumber(0,1,index*index*index) < GoldOrePropability){
+                this.Blocks[index] = new GoldOre(this.Blocks[index].Position);
             }
         });
 
@@ -134,6 +148,21 @@ class Game{
     CanGoRight(){
         var playerX = Math.round(this.Player.Position.X);
         var blocks = this.GetColumn(playerX+1);
+        if(playerX > this.Player.Position.X) return true;
+        if(blocks.filter((block) => block.Position.Y < this.Player.Position.Y + 1 && block.Position.Y > this.Player.Position.Y - 1).length > 0){
+            return false;
+        }
+        return true;
+    }
+
+    CanGoLeft(){
+        var playerX = Math.round(this.Player.Position.X);
+        var blocks = this.GetColumn(playerX-1);
+        if(playerX < this.Player.Position.X) return true;
+        if(blocks.filter((block) => block.Position.Y < this.Player.Position.Y + 1 && block.Position.Y > this.Player.Position.Y - 1).length > 0){
+            return false;
+        }
+        return true;
     }
 
     PlayerIsOnGround() {
