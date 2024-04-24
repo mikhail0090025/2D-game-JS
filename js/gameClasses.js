@@ -66,7 +66,6 @@ class Game{
         this.Blocks = [];
         for (let x = 0; x < this.Size; x++) {
             var stoneHeight = currHeight * RandomNumber(0.4, 0.7, this.Seed + x);
-            console.log("Random number: " + RandomNumber(0.4, 0.7, this.Seed + x));
             this.Blocks.push(new GrassBlock(new Point(x, currHeight)));
             for (let y = 0; y < currHeight; y++) {
                 if(y > stoneHeight){
@@ -77,7 +76,7 @@ class Game{
                     this.Blocks.push(new Bedrock(new Point(x, y)));
                 }
             }
-            if(RandomNumber(0,1,this.Seed + x) < ChanceChangeHeight){
+            if(RandomNumber(0,1,this.Seed * x) < ChanceChangeHeight){
                 if(currHeight <= MinGroundHeight) currHeight++;
                 else if(currHeight >= MaxGroundHeight) currHeight--;
                 else{
@@ -109,7 +108,41 @@ class Game{
         this.Blocks.forEach(block => {
             this.Matrix[block.Position.X][block.Position.Y] = block;
         });
-        console.log(this.Matrix);
+
+        // MINES
+        function NewMine(seed_, Blocks, Matrix, Size) {
+            var block = Blocks[Math.round(RandomNumber(0, Blocks.length - 1, seed_))];
+            var attempts = 1;
+            while (!(block instanceof Stone)) {
+                attempts++;
+                let ind = Math.round(RandomNumber(0, Blocks.length - 1, seed_ * attempts));
+                block = Blocks[ind];
+                if(attempts > 200){
+                    console.log("Is more than 200 attempts to find stone!");
+                    return;
+                }
+            }
+            console.log("Stone found");
+            var iterations = RandomNumber(5, 120, seed_ * 2);
+            var currX = block.Position.X;
+            var currY = block.Position.Y;
+            for (let index = 0; index < iterations; index++) {
+                console.log(Matrix[currX][currY]);
+                if(Matrix[currX][currY])
+                Matrix[currX][currY] = null;
+                console.log(`Block ${currX} ${currY} was removed`);
+                var rand = RandomNumber(0,1, seed_ + index);
+                if(rand < 0.25 && currX < Size - 1) currX++;
+                else if(rand < 0.5 && currX > 0) currX--;
+                else if(rand < 0.75 && currY > 0) currY--;
+                else currY++;
+            }
+        }
+
+        for (let index = 0; index < this.Size / 10; index++) {
+            //console.log(this.Blocks);
+            NewMine(this.Seed + index, this.Blocks, this.Matrix, this.Size);
+        }
 
         //PLAYER
         this.Player = new Player(new Point(2, 12));
