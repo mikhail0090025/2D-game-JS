@@ -11,9 +11,6 @@ const MainMenu = document.getElementById("MainMenu");
 const NewGameBlock = document.getElementById("NewGameBlock");
 const GameBlock = document.getElementById("Game");
 
-// MAIN CONSTANTS
-const blockSize = 20;
-
 // TECHNICAL
 var ClickedKeys = [];
 ButtonCreateGame.onclick = function () {
@@ -27,9 +24,13 @@ ButtonCreateGame.onclick = function () {
 
 function Redraw() {
     mainCanvasCtx.clearRect(0,0,mainCanvas.clientWidth, mainCanvas.clientHeight);
+    var MaxDistX = (mainCanvas.clientWidth / 2) / blockSize;
+    var MaxDistY = (mainCanvas.clientHeight / 2) / blockSize;
     currentGame.Blocks.forEach(block => {
         var offsetX = block.Position.X - currentGame.Player.Position.X;
         var offsetY = block.Position.Y - currentGame.Player.Position.Y;
+        if(MaxDistX < offsetX) return;
+        if(MaxDistY < offsetY) return;
         if(block instanceof GrassBlock){
             mainCanvasCtx.fillStyle = "green";
             mainCanvasCtx.fillRect((mainCanvas.clientWidth/2)+(offsetX*blockSize)-(blockSize/2), (mainCanvas.clientHeight/2)-(offsetY*blockSize), blockSize, blockSize);

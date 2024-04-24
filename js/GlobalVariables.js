@@ -7,3 +7,4 @@ const ChanceChangeHeight = 0.4;
 const MinGroundHeight = 5;
 const MaxGroundHeight = 20;
 const MaxAvailableHeight = 30; // Max available height for blocks
+const blockSize = 12;

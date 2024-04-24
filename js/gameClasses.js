@@ -3,6 +3,10 @@ class Point{
         this.X = x;
         this.Y = y;
     }
+
+    Distance(p2){
+        return Math.sqrt((this.X - p2.X) * (this.X - p2.X) + (this.Y - p2.Y) * (this.Y - p2.Y));
+    }
 }
 class Player{
     constructor(pos){
